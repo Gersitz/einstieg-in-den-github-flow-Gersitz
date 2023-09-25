@@ -1,0 +1,26 @@
+name: Code Review Test
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  test:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v2
+
+    - name: Run Test
+      run: |
+        $reviewerTagged = git log --pretty=%B -n 10 | Select-String -Pattern "@"
+        
+        if ($reviewerTagged) {
+          Write-Host "Test bestanden: Reviewer getaggt."
+          exit 0
+        } else {
+          Write-Host "Test fehlgeschlagen: Reviewer nicht getaggt."
+          exit 1
+        }
+      shell: pwsh

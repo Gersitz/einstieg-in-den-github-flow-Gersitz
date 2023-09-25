@@ -1,0 +1,26 @@
+name: Check Instructor's Change
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  check-change:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v2
+
+    - name: Run Test
+      run: |
+        git fetch origin main:main
+        $changeExists = git diff main..HEAD | Select-String -Pattern "🥛"
+        if ($changeExists) {
+          Write-Host "Test bestanden: Die Änderung des Instructors wurde gefunden."
+          exit 0
+        } else {
+          Write-Host "Test fehlschlagen: Die Änderung des Instructors wurde nicht gefunden."
+          exit 1
+        }
+      shell: pwsh

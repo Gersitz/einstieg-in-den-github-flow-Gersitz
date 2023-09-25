@@ -1,0 +1,28 @@
+name: Check Merge
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  check-merge:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 0  # Fetch all history
+
+    - name: Run Test
+      run: |
+        $merged = git log --merges -n 1 --pretty="%s"
+        if ($merged -match "Merge pull request") {
+          Write-Host "Test bestanden: Der Pull Request wurde erfolgreich gemerged."
+          exit 0
+        } else {
+          Write-Host "Test fehlgeschlagen: Der Pull Request wurde nicht gemerged."
+          exit 1
+        }
+      shell: pwsh

@@ -1,0 +1,33 @@
+name: Check Feature Branch and Commits
+
+on:
+  push:
+    branches:
+      - feature/more-moisture
+
+jobs:
+  check-branch-and-commits:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v2
+
+    - name: Fetch main branch
+      run: git fetch origin main:main
+
+    - name: Run Test
+      run: |
+        $branchExists = git ls-remote --heads origin feature/more-moisture
+        $commits = git rev-list --count main..HEAD
+        if ($branchExists -and $commits -gt 0) {
+          Write-Host "Test bestanden: Der Branch 'feature/more-moisture' existiert im Remote-Repository und hat neue Commits."
+          exit 0
+        } elseif (-not $branchExists) {
+          Write-Host "Test fehlgeschlagen: Der Branch 'feature/more-moisture' existiert nicht im Remote-Repository."
+          exit 1
+        } elseif ($commits -le 0) {
+          Write-Host "Test fehlgeschlagen: Keine neuen Commits im Branch 'feature/more-moisture'."
+          exit 1
+        }
+      shell: pwsh

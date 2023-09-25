@@ -1,0 +1,26 @@
+name: Branch Created Test
+
+on:
+  push:
+    branches:
+      - feature/more-moisture
+
+jobs:
+  test:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v2
+
+    - name: Run Test
+      run: |
+        $branchExists = git branch --list 'feature/more-moisture'
+        if ($branchExists) {
+          Write-Host "Test bestanden: Der Branch 'feature/more-moisture' existiert."
+          exit 0
+        } else {
+          Write-Host "Test fehlgeschlagen: Der Branch 'feature/more-moisture' existiert nicht."
+          exit 1
+        }
+      shell: pwsh
