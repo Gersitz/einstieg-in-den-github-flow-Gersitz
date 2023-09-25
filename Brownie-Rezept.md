@@ -9,7 +9,7 @@
 -   `1` **TL Vanillezucker**
 -   `120g` **Mehl**
 -   `1` **Prise Salz**
--   `50ml` **Milch**
+-   `50ml` **Milch** 🥛
 
 ## Anleitung
 
